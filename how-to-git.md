@@ -1,4 +1,4 @@
-# How to Git
+# Git To Know
 
 ## Reference
 <https://gitimmersion.com/lab_01.html>
@@ -151,6 +151,7 @@ doc/*.txt
 # ignore all .pdf files in the doc/ directory and any of its subdirectories
 doc/**/*.pdf
 ```
+## Recording Changes to Repo
 ### `git diff`
 The `git diff` shows you the exact lines added and removed- the patch, as it were.
 
@@ -170,8 +171,119 @@ git commit -a -m "Skipped Staging Area" # Skip Staging Area with -a flag
 
 ```
 ### `git rm`
+If you simply remove the file (`rm file`) from your working directory, it shows up under the “Changes not staged for commit” (that is, unstaged) area of your git status output:
+```bash
+# rm remove-me.md
+macbook@MacMan Git-to-know % rm remove-me.md 
 
+# git status
+macbook@MacMan Git-to-know % git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   how-to-git.md
+        new file:   remove-me.md
 
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   how-to-git.md
+        deleted:    remove-me.md
+```
+Then, if you run git rm, it stages the file’s removal. The next time you commit, the file will be gone and no longer tracked. If you modified the file or had already added it to the staging area, you must force the removal with the -f option. This is a safety feature to prevent accidental removal of data that hasn’t yet been recorded in a snapshot and that can’t be recovered from Git.
+
+```bash
+# git rm remove-me.md
+macbook@MacMan Git-to-know % git rm remove-me.md
+rm 'remove-me.md'
+
+# git status
+macbook@MacMan Git-to-know % git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   how-to-git.md
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   how-to-git.md
+```
+### Moving files
+```bash
+git mv files_from files_to # It is same as mv command
+```
+## Viewing Commit History
+```bash
+git log
+
+git log -p -2 # or --patch shows the difference introduced in each commit, -2 to show only last two entries
+
+git log --stat
+
+git log --pretty=oneline # other options are short, full, fuller
+
+git log --pretty=format:"%h - %an, %ar : %s"
+
+git log -S function_name # takes a string and shows only those commits that changed the number of occurrences of that string
+
+git log -- path/to/file #limit the log output to commits that introduced a change to those files
+
+```
+Examples:
+```bash
+# git log
+
+macbook@MacMan Git-to-know % git log
+commit ecb242d014e3961fcfe1458b0998fa757e554357 (HEAD -> main)
+Author: MacBook <macbook@MacMan.local>
+Date:   Sat Nov 29 00:28:44 2025 -0500
+
+    Topic completed upto move files
+
+commit f23f6c247af1fea63dcd5b169856d553bc2dc418
+Author: MacBook <macbook@MacMan.local>
+Date:   Fri Nov 28 23:52:10 2025 -0500
+
+    second commit
+
+commit 64562463561c54bee3adcef331ba018dbc69f11d #SHA-1 Checksum
+Author: MacBook <macbook@MacMan.local>
+Date:   Fri Nov 28 23:49:19 2025 -0500
+
+    First Commit
+```
+```bash
+# git log --stat -1
+
+macbook@MacMan Git-to-know % git log --stat -1
+commit ecb242d014e3961fcfe1458b0998fa757e554357 (HEAD -> main)
+Author: MacBook <macbook@MacMan.local>
+Date:   Sat Nov 29 00:28:44 2025 -0500
+
+    Topic completed upto move files
+
+ how-to-git.md | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
+```
+```bash
+# git log --pretty=oneline
+
+macbook@MacMan Git-to-know % git log --pretty=oneline
+ecb242d014e3961fcfe1458b0998fa757e554357 (HEAD -> main) Topic completed upto move files
+f23f6c247af1fea63dcd5b169856d553bc2dc418 second commit
+64562463561c54bee3adcef331ba018dbc69f11d First Commit
+```
+```bash
+# git log --pretty=format:"%h - %an, %ar : %s"
+
+macbook@MacMan Git-to-know % git log --pretty=format:"%h - %an, %ar : %s"
+ecb242d - MacBook, 15 minutes ago : Topic completed upto move files
+f23f6c2 - MacBook, 52 minutes ago : second commit
+6456246 - MacBook, 55 minutes ago : First Commit
+```
+
+## Undoing Things
 
 
 
