@@ -104,7 +104,7 @@ git clone https://github.com/satishkarki/satishkarki.github.io.git # uses https 
 
 git:// or user@server:path/to/repo.git # uses SSH protocol, more on this later
 ```
-### Git Status
+### `git status`
 ```bash
 # Long status
 macbook@MacMan Git-to-know % git status
@@ -151,6 +151,25 @@ doc/*.txt
 # ignore all .pdf files in the doc/ directory and any of its subdirectories
 doc/**/*.pdf
 ```
+### `git diff`
+The `git diff` shows you the exact lines added and removed- the patch, as it were.
+
+```bash
+git diff
+git diff --staged
+git difftool # Git Diff is an External tool
+git difftool --tool-help # To check what is available on your system
+```
+### `git commit`
+```bash
+git commit # this will open an editor like vim, :q to quit (pro tip)
+
+git commit -m "My First Commit" # using -m flag
+
+git commit -a -m "Skipped Staging Area" # Skip Staging Area with -a flag
+
+```
+### `git rm`
 
 
 
