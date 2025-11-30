@@ -546,5 +546,4 @@ At this point, you can do all the basic local Git operation. Next we will look a
 <https://gitimmersion.com/lab_01.html>
 
 <https://learngitbranching.js.org/>
-
 <https://git-scm.com/book/en/v2>
