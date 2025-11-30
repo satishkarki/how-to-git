@@ -285,5 +285,75 @@ f23f6c2 - MacBook, 52 minutes ago : second commit
 
 ## Undoing Things
 
+```bash
+git commit --amend # Amends changes to latest commit without creating new commit
+```
+Example
+```bash
+# Before git commit --amend
+macbook@MacMan Git-to-know % git log --pretty=oneline
+
+c17c8553c6831684b9dbed203a4b8243f1dcf904 (HEAD -> main) Topic added upto vewing commits
+ecb242d014e3961fcfe1458b0998fa757e554357 Topic completed upto move files
+f23f6c247af1fea63dcd5b169856d553bc2dc418 second commit
+64562463561c54bee3adcef331ba018dbc69f11d First Commit
+
+git commit --amend
+
+# After git commit --amend
+macbook@MacMan Git-to-know % git log --pretty=oneline
+
+ad7d380894cf988c971561dd8f265f50422e53be (HEAD -> main) this is the commit after ammend
+ecb242d014e3961fcfe1458b0998fa757e554357 Topic completed upto move files
+f23f6c247af1fea63dcd5b169856d553bc2dc418 second commit
+64562463561c54bee3adcef331ba018dbc69f11d First Commit
+```
+On the above example, if you check the checksum of the last commit, they are different, because amend doesn't add to the last commit, new commit is created and it will act like the previous commit never happend.
+
+### Unstaging a Staged file
+```bash
+git reset HEAD <file>
+
+git restore --staged <file> # same as reset, it was introduced in Git v2.23.0
+```
+Example:
+```bash
+
+# both files are staged
+macbook@MacMan Git-to-know % echo 'This is test to check undo staged file feature' > unstage-me.md
+macbook@MacMan Git-to-know % git add *
+macbook@MacMan Git-to-know % git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   how-to-git.md
+        new file:   unstage-me.md
+
+# git reset HEAD unstage-me.md
+
+macbook@MacMan Git-to-know % git reset HEAD unstage-me.md 
+macbook@MacMan Git-to-know % git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   how-to-git.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        unstage-me.md
+```
+### Unmodifying a Modified File
+```bash
+git checkout -- <file>
+git restore <file>
+```
+## Working with Remotes
+
+Until now, I only had local repo but didn't have a remote repo. So I went to GitHub and created the repo and pushed the code.
+```bash
+git remote add origin https://github.com/satishkarki/how-to-git.git
+
+git push -u origin main
+```
 
 
