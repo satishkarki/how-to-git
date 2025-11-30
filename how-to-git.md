@@ -1,12 +1,5 @@
 # Git To Know
 
-## Reference
-<https://gitimmersion.com/lab_01.html>
-
-<https://learngitbranching.js.org/>
-
-<https://git-scm.com/book/en/v2>
-
 Unlike other version control system, which are delta-based version control, git thinks about its data more like a stream of snapshots.
 
 Git has three main states that your file can reside in.
@@ -349,11 +342,209 @@ git restore <file>
 ```
 ## Working with Remotes
 
-Until now, I only had local repo but didn't have a remote repo. So I went to GitHub and created the repo and pushed the code.
+Until now, I only had local repo and I didn't have a remote repo. So I went to GitHub and created the repo and pushed the code.
 ```bash
 git remote add origin https://github.com/satishkarki/how-to-git.git
 
 git push -u origin main
 ```
+### Showing your remotes
+```bash
+# git remote
+macbook@MacMan Git-to-know % git remote
+origin
 
+# git remote -v
+macbook@MacMan Git-to-know % git remote -v
+origin  https://github.com/satishkarki/how-to-git.git (fetch)
+origin  https://github.com/satishkarki/how-to-git.git (push)
+macbook@MacMan Git-to-know % 
+```
+### Adding remote repos
+```bash
+# git remote add <shortname> <URL>
+git remote add pb https://github.com/johndoe/how-to-git.git
 
+# git remote -v
+origin https://github.com/satishkarki/how-to-git.git (fetch)
+origin  https://github.com/satishkarki/how-to-git.git (push)
+pb https://github.com/johndoe/how-to-git.git (fetch)
+pb https://github.com/johndoe/how-to-git.git (push)
+```
+### Fetching and Pulling
+```bash
+git fetch <remote> # It only downlaods the data to local repo, it doesn't automatically merge
+
+git pull # it will merge
+```
+
+### Pushing to remote
+```bash
+git push <remote> <branch> # git push origin main
+```
+
+<!-- markdownlint-capture -->
+<!-- markdownlint-disable -->
+> Warning !!
+{: .prompt-danger }
+<!-- markdownlint-restore -->
+
+If you and someone else cloned it and someone push it upstream before you. Your push will be rejected. You will have to fetch that upstream push and incorporate into your code to push.
+
+### Inspecting a remote 
+```bash
+git remote show origin
+```
+
+Example
+```bash
+# git remote show origin
+macbook@MacMan Git-to-know % git remote show origin
+* remote origin
+  Fetch URL: https://github.com/satishkarki/how-to-git.git
+  Push  URL: https://github.com/satishkarki/how-to-git.git
+  HEAD branch: main
+  Remote branch:
+    main tracked
+  Local branch configured for 'git pull':
+    main merges with remote main
+  Local ref configured for 'git push':
+    main pushes to main (up to date)
+```
+This command is helpful to tell you if you are on the master/main branch and you run git pull , it will automatically merge the remote's master/main branch into the local one after it has been fetched.
+
+### Renaming and Removing Remotes
+```bash
+git remote rename pb paul
+
+git remote remove paul
+```
+## Git Tagging
+This functionality is used to mark release points.
+```bash
+# Listing Tags
+git tag
+git tag -l "v2.0" # --list is also same
+```
+
+### Creating Tags
+```bash
+git tag -a v1.0 -m "my version 1.0" # Annotated Tag
+git tag v1.5-lw # LightWeight Tag
+git tag -a v1.6 ecb242d # Tagging later
+```
+```bash
+# Example
+
+macbook@MacMan Git-to-know % git show v1.0
+tag v1.0
+Tagger: MacBook <macbook@MacMan.local>
+Date:   Sat Nov 29 22:41:28 2025 -0500
+
+my version 1.0
+
+commit ff194fe35dccfba09af67b799526f52a5d1efd8d (HEAD -> main, tag: v1.0, origin/main)
+Author: MacBook <macbook@MacMan.local>
+Date:   Sat Nov 29 21:37:31 2025 -0500
+
+    Beginning of git remote topic
+
+# git log --pretty=online
+
+macbook@MacMan Git-to-know % git log --pretty=oneline
+ff194fe35dccfba09af67b799526f52a5d1efd8d (HEAD -> main, tag: v1.0, origin/main) Beginning of git remote topic
+ad7d380894cf988c971561dd8f265f50422e53be this is the commit after ammend
+ecb242d014e3961fcfe1458b0998fa757e554357 Topic completed upto move files
+f23f6c247af1fea63dcd5b169856d553bc2dc418 second commit
+64562463561c54bee3adcef331ba018dbc69f11d First Commit
+```
+```bash
+# Lightweight tag
+
+macbook@MacMan Git-to-know % git log --pretty=oneline
+ff194fe35dccfba09af67b799526f52a5d1efd8d (HEAD -> main, tag: v1.5-lw, tag: v1.0, origin/main) Beginning of git remote topic
+ad7d380894cf988c971561dd8f265f50422e53be this is the commit after ammend
+ecb242d014e3961fcfe1458b0998fa757e554357 Topic completed upto move files
+f23f6c247af1fea63dcd5b169856d553bc2dc418 second commit
+64562463561c54bee3adcef331ba018dbc69f11d First Commit
+```
+### Sharing Tags
+```bash
+git push origin <main> # git push origin v1.0
+git push --tags # For multiple tags
+git push <remote> --follow-tags # push only annotated tags
+```
+By default, the git push command doesn't transfer tags to remote servers.
+There is currently no option to push only lightweight tags.
+
+### Deleting Tags
+```bash
+git tag -d <tagname>
+
+git push <remote> :refs/tags/<tagname> 
+# or
+git push origin --delete <tagname>
+
+```
+```bash
+# Example
+
+# Git log before tag deletion
+
+macbook@MacMan Git-to-know % git log --pretty=oneline
+ff194fe35dccfba09af67b799526f52a5d1efd8d (HEAD -> main, tag: v1.5-lw, tag: v1.0, origin/main) Beginning of git remote topic
+ad7d380894cf988c971561dd8f265f50422e53be this is the commit after ammend
+ecb242d014e3961fcfe1458b0998fa757e554357 Topic completed upto move files
+f23f6c247af1fea63dcd5b169856d553bc2dc418 second commit
+64562463561c54bee3adcef331ba018dbc69f11d First Commit
+
+# Removing annotated tag
+macbook@MacMan Git-to-know % git tag -d v1.0
+Deleted tag 'v1.0' (was 321cc86)
+
+# Removing lightweight tag
+macbook@MacMan Git-to-know % git tag -d v1.5-lw
+Deleted tag 'v1.5-lw' (was ff194fe)
+
+# Git log after tag deletion
+macbook@MacMan Git-to-know % git log --pretty=oneline
+ff194fe35dccfba09af67b799526f52a5d1efd8d (HEAD -> main, origin/main) Beginning of git remote topic
+ad7d380894cf988c971561dd8f265f50422e53be this is the commit after ammend
+ecb242d014e3961fcfe1458b0998fa757e554357 Topic completed upto move files
+f23f6c247af1fea63dcd5b169856d553bc2dc418 second commit
+64562463561c54bee3adcef331ba018dbc69f11d First Commit
+```
+
+<!-- markdownlint-capture -->
+<!-- markdownlint-disable -->
+> Tips!!
+{: .prompt-tip }
+<!-- markdownlint-restore -->
+
+You can check out the tag as well. For this I would suggest check page 60 of [Pro Git](https://git-scm.com/book/en/v2) book.
+
+## Git Aliases
+If you don't want to type the entire command, you can setup alias using `git config`
+
+```bash
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.st status
+```
+Example
+```bash
+git config --global alias.unstage 'reset HEAD --'
+# This makes the following command equivalent
+git unstage fileA
+git reset HEAD -- fileA
+```
+
+At this point, you can do all the basic local Git operation. Next we will look at the Git's killer feature: its branching model.
+
+## Reference
+<https://gitimmersion.com/lab_01.html>
+
+<https://learngitbranching.js.org/>
+
+<https://git-scm.com/book/en/v2>
