@@ -88,6 +88,58 @@ $git log --oneline --decorate --graph --all
 * 98e3b1e  Beginning of Git Aliases topic
 ```
 ## Basic Branching and Merging
+It is best to have a clean working state when you switch branches. If your working directory or staging area has uncommitted changes that conflict with the branch you are checking out, Git won't let you switch branches. There are ways to get around it bit more on that later in `Stashing and Cleaning`.
+
+```bash
+$git checkout -b hotfix
+$echo "This is an example of hotfix" > hotfix.md
+$git add hotfix.md
+$git commit -m "The hotfix has been applied"
+
+# Now if we check the git log
+# Output
+$git log --oneline --decorate --graph --all
+* 22f66f9 (HEAD -> hotfix) The hotfix has been applied
+* 83fd752 (main) commit to create divergent
+| * 616c359 (testing) First commit of testing branch
+|/  
+* 5df03d0 (origin/main)  First commit of Git Branching
+* 7034b0d Git Basic topic complete
+* 98e3b1e  Beginning of Git Aliases topic
+* ad7d380 this is the commit after ammend
+...
+```
+Now lets merge this hotfix to our main. In the example, I do have the diverged `testing` branch, more on that later but for now, lets merge the hotfix.
+
+```bash
+$git checkout main
+$git merge hotfix
+```
+```bash
+#Output
+$git checkout main
+Switched to branch 'main'
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+$git merge hotfix
+Updating 83fd752..22f66f9
+Fast-forward
+ hotfix.md | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 hotfix.md
+
+$git log --oneline --decorate --graph --all
+* 22f66f9 (HEAD -> main, hotfix) The hotfix has been applied
+* 83fd752 commit to create divergent
+| * 616c359 (testing) First commit of testing branch
+|/  
+* 5df03d0 (origin/main)  First commit of Git Branching
+* 7034b0d Git Basic topic complete
+...
+```
+The `git log` output is similar to this diagram.
+![fastforward](post/git-branching/fastforward.png)
 
 
 
