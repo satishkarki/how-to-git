@@ -1,1 +1,1 @@
-This is an example of hotfix
+This is an example of hotfix2
