@@ -215,7 +215,7 @@ In case if you want to visualize it in VS Code
 
 ### Basic Merge Conflicts
 
-Here I created a branch `hotfix2` and mde changes to `hotfix.md` file. I committed the change and checked out main branch. I again made changes to `hotfix.md` and committed the change. Then I tried to merge the `hotfox2` branch to main. I get the following error:
+Here I created a branch `hotfix2` and made changes to `hotfix.md` file. I committed the change and checked out main branch. I again made changes to `hotfix.md` and committed the change. Then I tried to merge the `hotfox2` branch to main. I get the following error:
 
 ![Mergeconflict](merge-conflict.png)
  This is in VS Code but you can also run `git mergetool` for other graphical tools.
@@ -269,9 +269,101 @@ $git push origin --delete master # push it upstream
 ```
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable -->
-> Tips!!
+> Danger!!
 {: .prompt-danger }
 <!-- markdownlint-restore -->
 Changing the name of a branch like master/main/mainline/default will break the integrations, services, helper utilities and build/release scripts that your repository uses. Also, make sure you do a thorough search through your repo and update any references to the old branch name in your code and scripts.
 
 ## Remote Branches
+```bash
+$git ls-remote <remote> # or
+$git remote show <remote>
+```
+<!-- markdownlint-capture -->
+<!-- markdownlint-disable -->
+> 'origin' is not special
+{: .prompt-tips }
+<!-- markdownlint-restore -->
+
+```bash
+$git clone -o notoriginal 
+```
+Then you will have notorigianl/master as your default remote branch.
+
+Example
+![remote-branch](post/git-branching/remote-branches.png)
+
+```bash
+$git remote add teamone
+$git fetch teamone
+```
+### Pushing
+
+```bash
+$git push <remote> <branch> # Example $git push origin serverfix
+OR
+$git push origin serverfix:serverfix #Take my serverfix and make it the remote's serverfix
+
+$git push origin serverfix:awesomebranch # push your local serverfix branch to the awesomebranch on the remote project
+```
+```bash
+$git fetch origin
+$git merge origin/serverfix
+$git checkout -b serverfix origin/serverfix # Branch serverfix set up to track remote branch serverfix from origin
+
+$git fetch --all; git branch -vv #This will list out your local branches with more information including what each branch is tracking and if your local branch is ahead, behind or both.
+```
+### Pulling
+```bash
+$git pull # It is git fetch followed by git merge
+```
+### Deleting Remote Branch
+```bash
+$git push origin --delete serverfix # Deleting remote branch
+```
+## Rebasing
+In Git, there are two main ways to integrate changes from one branch into another: the `merge` and the `rebase`.
+
+The picture below is an example of git merging
+![basic merging](post/git-branching/basic-merging.png)
+
+Instead of doing show lets say we do this:
+```bash
+$git checkout experiment
+$git rebase master
+First, rewinding head to replay your work on top of it...
+Applying: added staged 
+```
+What happened?
+
+This operation works by going to the common ancestor of the two branches (the one you’re on and the one you’re rebasing onto), getting the diff introduced by each commit of the branch you’re on, saving those diffs to temporary files, resetting the current branch to the same commit as the branch you are rebasing onto, and finally applying each change in turn.
+
+
+![rebasing](post/git-branching/rebasing.png)
+Figure: Rebasing the changes introduced in C4 onto C3
+
+Now lets go back to the master branch
+```bash
+$git checkout master
+$git merge experiment
+```
+![rebasing-and-fastforwarding](post/git-branching/rebase-and-fastforwarding.png)
+Figure: Fast-forwarding the master branh
+
+Now the snapshot of C4' is exactly the same as C5 (from 3-way merging).
+<!-- markdownlint-capture -->
+<!-- markdownlint-disable -->
+> Safe rule of thumb
+{: .prompt-tips }
+<!-- markdownlint-restore -->
+* Rebase → local/private feature branches (before sharing)
+* Merge → public/shared branches (like main, develop, or someone else’s PR)
+
+### Advanced rebase
+```bash
+$git rebase <basebranch> <topicbranch>
+```
+I would suggest checking [Pro Git](https://git-scm.com/book/en/v2)  book page 97-99 for more details.
+
+The Perlis of Rebasing, page 100-103.
+
