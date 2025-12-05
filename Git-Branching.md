@@ -282,7 +282,11 @@ $git remote show <remote>
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable -->
 > 'origin' is not special
+<<<<<<< HEAD
 {: .prompt-tip }
+=======
+{: .prompt-tips }
+>>>>>>> origin/main
 <!-- markdownlint-restore -->
 
 ```bash
@@ -354,7 +358,11 @@ Now the snapshot of C4' is exactly the same as C5 (from 3-way merging).
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable -->
 > Safe rule of thumb
+<<<<<<< HEAD
 {: .prompt-tip }
+=======
+{: .prompt-tips }
+>>>>>>> origin/main
 <!-- markdownlint-restore -->
 * Rebase → local/private feature branches (before sharing)
 * Merge → public/shared branches (like main, develop, or someone else’s PR)
